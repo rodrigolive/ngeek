@@ -1,0 +1,96 @@
+#!/usr/bin/perl
+use strict;
+use Plack::Runner;
+
+sub version {
+    require Ngeek;
+    print "Ngeek $Ngeek::VERSION\n";
+}
+
+my $preload_app;
+
+require Getopt::Long;
+Getopt::Long::Configure("no_ignore_case", "no_auto_abbrev", "pass_through");
+Getopt::Long::GetOptions(
+    "preload-app"      => \$preload_app,
+);
+
+my @args = (server => 'Ngeek', env => 'deployment', version_cb => \&version);
+if (!$preload_app) {
+    push @args, 'loader' => 'Delayed';
+}
+
+my @argv = @ARGV;
+
+my $runner = Plack::Runner->new(@args);
+$runner->parse_options(@argv);
+$runner->set_options(argv => \@argv);
+$runner->run;
+
+__END__
+
+=head1 NAME
+
+ngeek - Ngeek server launcher
+
+=head1 SYNOPSIS
+
+  ngeek --listen :5001 --listen /tmp/ngeek.sock
+  ngeek --port 8080
+
+=over 4
+
+=item -l, --listen
+
+  --listen HOST:PORT --listen :PORT --listen UNIX_SOCKET
+
+Specifies the TCP address, ports and UNIX domain sockets to bind to
+wait for requests. You can repeat as many times as you want and mix
+TCP and UNIX domain sockets.
+
+Defaults to any IP address and port 5000.
+
+=item --host
+
+  --host 127.0.0.1
+
+Specifies the address to bind.
+
+This option is for a compatiblity with L<plackup> and you're
+recommended to use C<--listen> instead.
+
+=item --port
+
+  --port 8080
+
+Specifies the port to bind.
+
+This option is for a compatiblity with L<plackup> and you're
+recommended to use C<--listen> instead.
+
+=item -S, --socket
+
+  -S /tmp/ngeek.sock
+
+Specifies the path to UNIX domain socket to bind.
+
+This option is for a compatiblity with L<plackup> and you're
+recommended to use C<--listen> instead.
+
+=item --disable-keepalive
+
+Disable Keep-alive persistent connections. It is an useful workaround
+if you run Ngeek behind a broken frontend proxy that tries to pool
+connections more than a number of backend workers (i.e. Apache
+mpm_prefork + mod_proxy).
+
+=back
+
+See C<plackup -h> for more options.
+
+=head1 SEE ALSO
+
+L<Ngeek>
+
+=cut
+

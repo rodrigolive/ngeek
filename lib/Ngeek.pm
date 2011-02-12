@@ -13,18 +13,18 @@ __END__
 
 =head1 NAME
 
-Ngeek - High-performance preforking PSGI/Plack web server
+Ngeek - Nginx::Engine based PSGI/Plack web server
 
 =head1 SYNOPSIS
 
   # Run app.psgi with the default settings
-  > starman
+  > ngeek
 
   # run with Server::Starter
-  > start_server --port 127.0.0.1:80 -- starman --workers 32 myapp.psgi
+  > start_server --port 127.0.0.1:80 -- ngeek myapp.psgi
 
   # UNIX domain sockets
-  > starman --listen /tmp/starman.sock
+  > ngeek --listen /tmp/starman.sock
 
 =head1 DESCRIPTION
 
@@ -102,36 +102,9 @@ This benchmark was processed with C<ab -c 10 -t 1 -k> on MacBook Pro
 
 =head1 NAMING
 
-=head2 Ngeek?
-
-The name Ngeek is taken from the song (I<Star na Otoko>) by the
-Japanese rock band Unicorn (yes, Unicorn!). It's also known as a song
-by David Bowie, a power-up from Super Mario Brothers and a character
-from Earthbound, all of which I love.
-
-=head2 Why the cute name instead of more descriptive namespace? Are you on drugs?
-
-I'm sick of naming Perl software like
-HTTP::Server::PSGI::How::Its::Written::With::What::Module and people
-call it HSPHIWWWM on IRC. It's hard to say on speeches and newbies
-would ask questions what they stand for every day. That's crazy.
-
-This module actually includes the longer alias and an empty subclass
-L<HTTP::Server::PSGI::Net::Server::PreFork> for those who like to type
-more ::'s. It would actually help you find this software by searching
-for I<PSGI Server Prefork> on CPAN, which i believe is a good thing.
-
-Yes, maybe I'm on drugs. We'll see.
-
 =head1 AUTHOR
 
-Tatsuhiko Miyagawa E<lt>miyagawa@bulknews.netE<gt>
-
-Andy Grundman wrote L<Catalyst::Engine::HTTP::Prefork>, which this module
-is heavily based on.
-
-Kazuho Oku wrote L<Net::Server::SS::PreFork> that makes it easy to add
-L<Server::Starter> support to this software.
+Rodrigo de Oliveira Gonzalez
 
 =head1 LICENSE
 
@@ -140,7 +113,7 @@ it under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-L<Plack> L<Catalyst::Engine::HTTP::Prefork> L<Net::Server::Prefork>
+L<Plack> L<Nginx::Engine> L<Twiggy>
 
 =cut
 
