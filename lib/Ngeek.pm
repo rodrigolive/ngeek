@@ -15,16 +15,15 @@ __END__
 
 Ngeek - Nginx::Engine based PSGI/Plack web server
 
+WIP: half of the chunked tests and HTTP 1.1 are still failing. 
+
 =head1 SYNOPSIS
 
   # Run app.psgi with the default settings
   > ngeek
-
-  # run with Server::Starter
-  > start_server --port 127.0.0.1:80 -- ngeek myapp.psgi
-
-  # UNIX domain sockets
-  > ngeek --listen /tmp/starman.sock
+  
+  # Or with plackup 
+  > plackup -s Ngeek app.psgi
 
 =head1 DESCRIPTION
 
@@ -36,20 +35,10 @@ Ngeek is a PSGI perl web server that has unique features such as:
 
 Uses the fast XS/C HTTP header parser
 
-=item Preforking
+=item AnyEvent-style speed
 
-Spawns workers preforked like most high performance UNIX servers
-do. Ngeek also reaps dead children and automatically restarts the
-worker pool.
-
-=item Signals
-
-Supports C<HUP> for graceful restarts, and C<TTIN>/C<TTOU> to
-dynamically increase or decrease the number of worker processes.
-
-=item Superdaemon aware
-
-Supports L<Server::Starter> for hot deploy and graceful restarts.
+AnyEvent style connection handling, but done by the same Nginx
+engine we've grow to love.
 
 =item Multiple interfaces and UNIX Domain Socket support
 
@@ -68,11 +57,11 @@ Can run any PSGI applications and frameworks
 
 =item HTTP/1.1 support
 
-Supports chunked requests and responses, keep-alive and pipeline requests.
+WIP: Support chunked requests and responses, keep-alive and pipeline requests.
 
 =item UNIX only
 
-This server does not support Win32.
+This server does not support Win32, but it all depends on Nginx::Engine.
 
 =back
 
@@ -88,23 +77,15 @@ Here's a simple benchmark using C<Hello.psgi>.
   Requests per second:    2738.49 [#/sec] (mean)
   -- server: HTTP::Server::PSGI
   Requests per second:    2218.16 [#/sec] (mean)
-  -- server: HTTP::Server::PSGI (workers=10)
-  Requests per second:    2792.99 [#/sec] (mean)
-  -- server: HTTP::Server::Simple
-  Requests per second:    1435.50 [#/sec] (mean)
-  -- server: Corona
-  Requests per second:    2332.00 [#/sec] (mean)
-  -- server: POE
-  Requests per second:    503.59 [#/sec] (mean)
 
-This benchmark was processed with C<ab -c 10 -t 1 -k> on MacBook Pro
-13" late 2009 model on Mac OS X 10.6.2 with perl 5.10.0. YMMV.
-
-=head1 NAMING
+This benchmark was processed with C<ab -c 10 -t 1 -k> on MacBook Air
+13" late 2010 model on Mac OS X 10.6.2 with perl 5.10.1. YMMV.
 
 =head1 AUTHOR
 
 Rodrigo de Oliveira Gonzalez
+
+Heavly copied from Starman. 
 
 =head1 LICENSE
 
